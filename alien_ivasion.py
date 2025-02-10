@@ -28,7 +28,7 @@ class AlienInvasion():
 
 
         #Задание фонового цвета
-        self.bg_color = (230, 230, 230)
+        self.bg_image = pygame.image.load('images/background.jpg') # В данном случае подтягиваем картинку на фон
 
     def run_game(self):
         """Запускает основной цикл игры"""
@@ -146,18 +146,15 @@ class AlienInvasion():
       
     def _update_screen(self):
         """Обновляет экраны"""
-        self.screen.fill(self.bg_color)
-        # Отрисовка всех пришельцев
+        self.screen.blit(self.bg_image, (0, 0)) # Рисуем фон
 
-        self.screen.fill(self.settings.bg_color)
+        # Отрисовываем корабль
         self.ship.blitme()
 
-        # Отрисовка всех пришельцев
-        for alien in self.aliens:
-            self.screen.blit(alien.image, alien.rect)
+        # Отрисовываем всех пришельцев
+        self.aliens.draw(self.screen)
 
-
-        # Отрисовка всех снарядов
+        # Отрисовываем все снаряды
         for bullet in self.bullets:
             bullet.draw_bullet()
 
