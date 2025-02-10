@@ -22,9 +22,10 @@ class AlienInvasion():
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group() # Группа для снарядов
         self.aliens = pygame.sprite.Group() # Группа для пришельцев
+        self._create_fleet()  # Создаёт флот пришельцев
         self.stars = pygame.sprite.Group() # Группа для звёзд
 
-        self._create_fleet() # Создаёт флот пришельцев
+
 
         #Задание фонового цвета
         self.bg_color = (230, 230, 230)
@@ -37,7 +38,6 @@ class AlienInvasion():
             self._update_bullets()
             self._update_aliens()
             self._check_fleet_edges()
-            self.aliens.update()
             self.bullets.update()
             self._update_screen()
             self.clock.tick(60) # Ограничение FPS
@@ -85,6 +85,7 @@ class AlienInvasion():
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <=0:
                 self.bullets.remove(bullet)
+
 
                 # Обновляем пришельцев перед проверкой коллизии
                 self.aliens.update()
@@ -147,18 +148,19 @@ class AlienInvasion():
         """Обновляет экраны"""
         self.screen.fill(self.bg_color)
         # Отрисовка всех пришельцев
+
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()
 
         # Отрисовка всех пришельцев
         for alien in self.aliens:
             self.screen.blit(alien.image, alien.rect)
-            pygame.draw.rect(self.screen, (255, 0, 0), alien.rect, 2) #Красный хитбокс
+
 
         # Отрисовка всех снарядов
         for bullet in self.bullets:
-            pygame.draw.rect(self.screen, (0, 255, 0), bullet.rect, 2) # Зелёный хитбокс
             bullet.draw_bullet()
+
         pygame.display.flip()
 
 if __name__ == "__main__":
