@@ -28,7 +28,7 @@ class AlienInvasion():
 
 
         #Задание фонового цвета
-        self.bg_image = pygame.image.load('images/background.jpg') # В данном случае подтягиваем картинку на фон
+        self.bg_image = pygame.image.load('images/background.png') # В данном случае подтягиваем картинку на фон
 
     def run_game(self):
         """Запускает основной цикл игры"""
@@ -99,6 +99,11 @@ class AlienInvasion():
                     for aliens in collision.values(): # Удаляем каждого пришельца из коллизии
                         for alien in aliens:
                             self.aliens.remove(alien)
+
+                            if not self.aliens:
+                                # Уничтожение существующих снарядов и создание нового флота
+                                self.bullets.empty()
+                                self._create_fleet()
                 
 
     def _update_aliens(self):
