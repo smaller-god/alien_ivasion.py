@@ -112,15 +112,25 @@ class AlienInvasion():
         alien = Alien(self)
         alien_width, alien_height = alien.rect.size
 
-        current_x, current_y = alien_width, alien_height
-        while current_y < (self.settings.screen_height - 3 * alien_height):
-            while current_x < (self.settings.screen_width - 2 * alien_width):
-                self._create_alien(current_x, current_y)
-                current_x += 2 * alien_width
+        current_y = alien_height # Изначально позиция по y
 
-            # Конец ряда: сбрасываем значение x и инкрементируем значение y
-            current_x = alien_width
-            current_y += 2 * alien_height
+        while current_y < (self.settings.screen_height - 3 * alien_height):
+            current_x = alien_width # Начальная позиция по X для нового ряда
+
+            while current_x < (self.settings.screen_width - 2 * alien_width):
+                self.create_alien(current_x, current_y)
+                current_x += 2 * alien_width # Смещаемся по X
+
+            current_y += 2 * alien_width # После окончания ряда двигаемся вниз
+
+    def create_alien(self, x_position, y_position):
+        """Создаёт пришельца и размещает его в ряду"""
+        new_alien = Alien(self)
+        new_alien.x = x_position
+        new_alien.rect.x = x_position
+        new_alien.rect.y = y_position
+        self.aliens.add(new_alien)
+
 
     def _check_fleet_edges(self):
         """Реагирует на достижение пришельцами края экрана"""
@@ -134,14 +144,6 @@ class AlienInvasion():
         for alien in self.aliens.sprites():
             alien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1 # Меняем направление
-
-    def _create_alien(self, x_position, y_position):
-        """Создаёт пришельца и размещает его в ряду"""
-        new_alien = Alien(self)
-        new_alien.x = x_position
-        new_alien.rect.x = x_position
-        new_alien.rect.y = y_position
-        self.aliens.add(new_alien)
 
       
     def _update_screen(self):
