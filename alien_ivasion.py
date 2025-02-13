@@ -86,24 +86,17 @@ class AlienInvasion():
             if bullet.rect.bottom <=0:
                 self.bullets.remove(bullet)
 
+                self.check_bullet_alien_collision()
 
-                # Обновляем пришельцев перед проверкой коллизии
-                self.aliens.update()
+    def check_bullet_alien_collision(self):
+        """Обрабатывает коллизии снарядов с пришельцами"""
+        # Удаление снарядов и пришельцев, учавствующих в коллизиях
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        if not self.aliens:
+            # Уничтожение существующих снарядов и создание нового флота
+            self.bullets.empty()
+            self._create_fleet()
 
-                # Проверка попаданий в пришельцев
-                # При обнаружении попадания удаляет снаряд и пришельца
-                collision = pygame.sprite.groupcollide(self.bullets, self.aliens, True, False)
-
-
-                if collision:
-                    for aliens in collision.values(): # Удаляем каждого пришельца из коллизии
-                        for alien in aliens:
-                            self.aliens.remove(alien)
-
-                            if not self.aliens:
-                                # Уничтожение существующих снарядов и создание нового флота
-                                self.bullets.empty()
-                                self._create_fleet()
                 
 
     def _update_aliens(self):
@@ -124,7 +117,7 @@ class AlienInvasion():
 
             while current_x < (self.settings.screen_width - 2 * alien_width):
                 self.create_alien(current_x, current_y)
-                current_x += 2 * alien_width # Смещаемся по X
+                current_x += int(alien_width * 1.5) # Смещаемся по X
 
             current_y += 2 * alien_width # После окончания ряда двигаемся вниз
 
