@@ -84,6 +84,9 @@ class AlienInvasion():
             self._create_fleet()
             self.ship.center_ship()
 
+            # Скрывает указатель мыши
+            pygame.mouse.set_visible(False)
+
 
     def _check_keydown_events(self, event):
         """Реагирует на нажатие клавиш"""
