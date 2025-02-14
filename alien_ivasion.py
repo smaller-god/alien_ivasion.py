@@ -33,13 +33,12 @@ class AlienInvasion():
         self.stars = pygame.sprite.Group() # Группа для звёзд
         self.game_active = False # Запускает игру в неактивном состоянии
 
-
+        # Создаёт кнопку Play
+        self.play_button = Button(self, "Play")
 
         #Задание фонового цвета
         self.bg_image = pygame.image.load('images/background.png') # В данном случае подтягиваем картинку на фон
 
-        # Создаёт кнопку Play
-        self.play_button = Button(self, "Play")
 
     def run_game(self):
         """Запускает основной цикл игры"""
@@ -65,6 +64,14 @@ class AlienInvasion():
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
+
+    def _check_play_button(self, mouse_pos):
+        """Запускает новую игру при нажатии кнопки Play"""
+        if self.play_button.rect.collidepoint(mouse_pos):
+            self.game_active = True
 
     def _check_keydown_events(self, event):
         """Реагирует на нажатие клавиш"""
@@ -74,6 +81,9 @@ class AlienInvasion():
             self.ship.moving_left = True
         elif event.key == pygame.K_q:
             sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_pos = pygame.mouse.get_pos()
+            self._check_play_button(mouse_pos)
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
 
@@ -200,13 +210,14 @@ class AlienInvasion():
         # Отрисовываем всех пришельцев
         self.aliens.draw(self.screen)
 
-        # Кнопка Play отображается в том случае, если игра не активна
-        if not self.game_active:
-            self.play_button.draw_button()
 
         # Отрисовываем все снаряды
         for bullet in self.bullets:
             bullet.draw_bullet()
+
+        # Кнопка Play отображается в том случае, если игра не активна
+        if not self.game_active:
+            self.play_button.draw_button()
 
         pygame.display.flip()
 
