@@ -5,6 +5,7 @@ import pygame
 
 from settings import Settings
 from game_stats import GameStats
+from button import Button
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
@@ -30,21 +31,28 @@ class AlienInvasion():
         self.aliens = pygame.sprite.Group() # Группа для пришельцев
         self._create_fleet()  # Создаёт флот пришельцев
         self.stars = pygame.sprite.Group() # Группа для звёзд
+        self.game_active = False # Запускает игру в неактивном состоянии
 
 
 
         #Задание фонового цвета
         self.bg_image = pygame.image.load('images/background.png') # В данном случае подтягиваем картинку на фон
 
+        # Создаёт кнопку Play
+        self.play_button = Button(self, "Play")
+
     def run_game(self):
         """Запускает основной цикл игры"""
         while True:
             self._check_events()
-            self.ship.update()
-            self._update_bullets()
-            self._update_aliens()
-            self._check_fleet_edges()
-            self.bullets.update()
+
+            if self.game_active:
+                self.ship.update()
+                self._update_bullets()
+                self._update_aliens()
+                self._check_fleet_edges()
+                self.bullets.update()
+
             self._update_screen()
             self.clock.tick(60) # Ограничение FPS
             
@@ -111,23 +119,26 @@ class AlienInvasion():
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
             self._ship_hit()
         # Проверка, сталкиваются ли пришельцы с нижним краем экрана
-            self._check_aliens_bottom()
+        self._check_aliens_bottom()
 
     def _ship_hit(self):
         """Обрабатывает столкновение корабля и пришельца"""
-        # Уменьшение ships_lef
-        self.stats.ships_left -= 1
+        if self.stats.ships_left > 0:
+            # Уменьшение ships_lef
+            self.stats.ships_left -= 1
 
-        # Очистка групп aliens и bullets
-        self.aliens.empty()
-        self.bullets.empty()
+            # Очистка групп aliens и bullets
+            self.aliens.empty()
+            self.bullets.empty()
 
-        # Создание нового флота и размещение корабля в центре
-        self._create_fleet()
-        self.ship.center_ship()
+         # Создание нового флота и размещение корабля в центре
+            self._create_fleet()
+            self.ship.center_ship()
 
-        # Пауза
-        sleep(0.5)
+            # Пауза
+            sleep(0.5)
+        else:
+            self.game_active = False
 
     def _create_fleet(self):
         """Создаёт флот пришельцев"""
@@ -188,6 +199,10 @@ class AlienInvasion():
 
         # Отрисовываем всех пришельцев
         self.aliens.draw(self.screen)
+
+        # Кнопка Play отображается в том случае, если игра не активна
+        if not self.game_active:
+            self.play_button.draw_button()
 
         # Отрисовываем все снаряды
         for bullet in self.bullets:
