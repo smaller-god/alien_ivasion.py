@@ -73,6 +73,7 @@ class AlienInvasion():
         if self.play_button.rect.collidepoint(mouse_pos):
             self.game_active = True
 
+
     def _check_keydown_events(self, event):
         """Реагирует на нажатие клавиш"""
         if event.key == pygame.K_RIGHT:

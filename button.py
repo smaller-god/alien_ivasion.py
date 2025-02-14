@@ -1,4 +1,4 @@
-import  pygame.font
+import pygame.font
 
 
 class Button:
@@ -33,3 +33,10 @@ class Button:
         """Отображает пустую кнопку и выводит сообщение"""
         self.screen.fill(self.button_color, self.rect)
         self.screen.blit(self.msg_image, self.msg_image_rect)
+
+    def is_clicked(self,event):
+        """Проверяет, была ли нажата кнопка"""
+        if event.type == pygame.MOUSEBUTTONUP:
+            mouse_pos = pygame.mouse.get_pos()
+            return self.rect.collidepoint(mouse_pos)
+        return False
