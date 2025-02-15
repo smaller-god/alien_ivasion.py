@@ -2,7 +2,7 @@ class Settings:
     """Класс для хранения всех настроек игры"""
 
     def __init__(self):
-        """Инициализирует настройки игры"""
+        """Инициализирует статические настройки игры"""
         # Параметры экрана
         self.screen_width = 1366
         self.screen_height = 768
@@ -10,7 +10,6 @@ class Settings:
 
 
         # Настройки корабля
-        self.ship_speed = 5
         self.ship_limit = 2
 
         # Параметры снаряда
@@ -21,7 +20,24 @@ class Settings:
         self.bullets_allowed = 99
 
         # Настройки пришельцев
-        self.alien_speed = 1
         self.fleet_drop_speed = 5
+
+        # Темп ускорения игры
+        self.speedup_scale = 1.1
+
+        self.initialize_dynamic_settings()
+
+    def initialize_dynamic_settings(self):
+        """Инициализирует настройки, меняющиеся по ходу игры"""
+        self.ship_speed = 1.5
+        self.bullet_speed = 2.5
+        self.alien_speed = 1.0
+
         # fleet_direction = 1 означает движение вправо, а -1 -- влево
         self.fleet_direction = 1
+
+    def increase_speed(self):
+        """Увеличивает настройки скорости"""
+        self.ship_speed *= self.speedup_scale
+        self.bullet_speed *= self.speedup_scale
+        self.alien_speed *= self.speedup_scale
