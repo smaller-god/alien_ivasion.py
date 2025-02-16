@@ -79,6 +79,7 @@ class AlienInvasion():
             # Сброс игровой статистики
             self.stats.reset_stats()
             self.sb.prep_score()
+            self.sb.prep_level()
             self.game_active = True
 
             # Очистка групп aliens и bullets
@@ -148,6 +149,10 @@ class AlienInvasion():
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+
+            # Увеличение уровня
+            self.stats.level += 1
+            self.sb.prep_level()
 
                 
 
